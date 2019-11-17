@@ -1,16 +1,24 @@
-name := "random"
-version := "1.0"
-scalaVersion := "2.11.8"
+lazy val akkaHttpVersion = "10.1.10"
+lazy val akkaVersion    = "2.6.0"
 
-resolvers += "Akka Snapshot Repository" at "http://repo.akka.io/snapshots/"
+lazy val root = (project in file(".")).
+  settings(
+    inThisBuild(List(
+      organization    := "com.example",
+      scalaVersion    := "2.13.1",
+      resolvers += "Typesafe Repository" at "https://repo.typesafe.com/typesafe/releases/"
+    )),
+    name := "akka-http-restful",
+    libraryDependencies ++= Seq(
+      "com.typesafe.akka" %% "akka-http"                % akkaHttpVersion,
+      "com.typesafe.akka" %% "akka-http-spray-json"     % akkaHttpVersion,
+      "com.typesafe.akka" %% "akka-actor-typed"         % akkaVersion,
+      "com.typesafe.akka" %% "akka-stream"              % akkaVersion,
+      "ch.qos.logback"    % "logback-classic"           % "1.2.3",
 
-libraryDependencies += "com.typesafe.akka" %% "akka-http-experimental" % "2.4.2"
-libraryDependencies += "de.heikoseeberger" %% "akka-http-json4s" % "1.5.3"
-libraryDependencies += "org.json4s" %% "json4s-native" % "3.4.0"
-libraryDependencies += "org.json4s" %% "json4s-jackson" % "3.4.0"
-//libraryDependencies += "com.typesafe.akka" %% "akka-http-testkit" % "2.4.2" % "test"
+      "com.typesafe.akka" %% "akka-http-testkit"        % akkaHttpVersion % Test,
+      "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion     % Test,
+      "org.scalatest"     %% "scalatest"                % "3.0.8"         % Test
 
-libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.0"
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
-
-TaskKey[Unit]("airportServer") := (runMain in Compile).toTask(" server.AirportRESTServer").value
+    )
+  )
